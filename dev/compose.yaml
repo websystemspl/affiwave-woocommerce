@@ -1,0 +1,50 @@
+# AffiWave for WooCommerce — dev shop at http://affiwave-wc.localhost (see dev/README.md).
+# Optional external networks of the Web Systems dev machine: narzedzia-proxy (Traefik), traefik-public (reach a local
+# AffiWave as http://affiwave-internal), mailpit. Elsewhere: drop them and publish nginx on a port.
+name: affiwave-wc
+
+services:
+  php:
+    build: .
+    image: affiwave-wc-php
+    volumes:
+      - wordpress:/var/www/html
+      - ..:/var/www/html/wp-content/plugins/affiwave-woocommerce
+    networks: [default, traefik-public, mailpit]
+    depends_on:
+      db: { condition: service_healthy }
+
+  nginx:
+    image: nginx:1.27-alpine
+    volumes:
+      - wordpress:/var/www/html:ro
+      - ..:/var/www/html/wp-content/plugins/affiwave-woocommerce:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on: [php]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=narzedzia-proxy
+      - traefik.http.routers.affiwave-wc.rule=Host(`affiwave-wc.localhost`)
+      - traefik.http.routers.affiwave-wc.entrypoints=web
+      - traefik.http.services.affiwave-wc.loadbalancer.server.port=80
+    networks:
+      default:
+        aliases: [shop]
+      narzedzia-proxy: {}
+      traefik-public:
+        aliases: [affiwave-wc-internal]   # AffiWave -> shop webhooks
+
+  db:
+    image: mariadb:11.8
+    environment: { MARIADB_ROOT_PASSWORD: root, MARIADB_DATABASE: wordpress, MARIADB_USER: wordpress, MARIADB_PASSWORD: wordpress }
+    healthcheck: { test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"], interval: 5s, retries: 20 }
+    volumes: [db:/var/lib/mysql]
+
+networks:
+  narzedzia-proxy: { external: true }
+  traefik-public: { external: true }
+  mailpit: { external: true }
+
+volumes:
+  wordpress:
+  db:

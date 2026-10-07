@@ -1,0 +1,96 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: AffiWave for WooCommerce 0.1.0\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Domain: affiwave-woocommerce\n"
+
+msgid "Add it in AffiWave → Webhooks with the events coupon.created and coupon.updated."
+msgstr "Dodaj go w AffiWave → Webhooki ze zdarzeniami coupon.created i coupon.updated."
+
+msgid "AffiWave → Settings → API keys. Scopes: conversions:write and reports:read."
+msgstr "AffiWave → Ustawienia → Klucze API. Uprawnienia: conversions:write i reports:read."
+
+msgid "AffiWave address"
+msgstr "Adres AffiWave"
+
+msgid "AffiWave: conversion refunded."
+msgstr "AffiWave: konwersja wycofana (zwrot)."
+
+msgid "AffiWave: conversion rejected (%s). It will not be retried."
+msgstr "AffiWave: konwersja odrzucona (%s). Nie będzie ponawiana."
+
+msgid "AffiWave: conversion reported (%1$s net), conversion #%2$s."
+msgstr "AffiWave: konwersja zgłoszona (%1$s netto), konwersja #%2$s."
+
+msgid "AffiWave partner coupon #%1$d (partner #%2$s). Managed in AffiWave — changes made here are overwritten."
+msgstr "Kupon partnera AffiWave #%1$d (partner #%2$s). Zarządzany w AffiWave — zmiany wprowadzone tutaj zostaną nadpisane."
+
+msgid "API key"
+msgstr "Klucz API"
+
+msgid "Click cookie lifetime (days)"
+msgstr "Ważność cookie kliknięcia (dni)"
+
+msgid "Connection failed: %s"
+msgstr "Połączenie nieudane: %s"
+
+msgid "Connection works: the API key is valid and can read coupons."
+msgstr "Połączenie działa: klucz API jest poprawny i może odczytywać kupony."
+
+msgid "Default: https://affiwave.com"
+msgstr "Domyślnie: https://affiwave.com"
+
+msgid "Keep it equal to the program cookie duration in AffiWave."
+msgstr "Ustaw tyle samo, ile ważność cookie programu w AffiWave."
+
+msgid "Last coupon sync"
+msgstr "Ostatnia synchronizacja kuponów"
+
+msgid "never"
+msgstr "nigdy"
+
+msgid "Only coupons of this program are created in the shop. Empty = all programs of the account."
+msgstr "W sklepie powstają tylko kupony tego programu. Puste = wszystkie programy konta."
+
+msgid "Order ID prefix"
+msgstr "Prefiks numeru zamówienia"
+
+msgid "Partner links of your AffiWave program must use the attribution parameter aw_click. Every paid order of a referred customer — including subscription renewals — is reported as a conversion (net amount, order currency)."
+msgstr "Linki partnerów w programie AffiWave muszą używać parametru atrybucji aw_click. Każde opłacone zamówienie poleconego klienta — także odnowienie subskrypcji — jest zgłaszane jako konwersja (kwota netto, waluta zamówienia)."
+
+msgid "Program ID"
+msgstr "ID programu"
+
+msgid "Sent as external_order_id = prefix + order number. Must be unique per shop within one AffiWave account. Empty = shop host."
+msgstr "Wysyłany jako external_order_id = prefiks + numer zamówienia. Musi być unikalny dla sklepu w obrębie konta AffiWave. Puste = domena sklepu."
+
+msgid "Set in wp-config.php (%s)."
+msgstr "Ustawione w wp-config.php (%s)."
+
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgid "Settings saved."
+msgstr "Ustawienia zapisane."
+
+msgid "Shown once when you add the webhook below in AffiWave → Webhooks (events coupon.created and coupon.updated)."
+msgstr "Pokazywany raz, gdy dodajesz poniższy webhook w AffiWave → Webhooki (zdarzenia coupon.created i coupon.updated)."
+
+msgid "stored — leave empty to keep"
+msgstr "zapisany — zostaw puste, aby zachować"
+
+msgid "Test connection"
+msgstr "Sprawdź połączenie"
+
+msgid "Webhook secret"
+msgstr "Sekret webhooka"
+
+msgid "Webhook URL"
+msgstr "Adres webhooka"
+
+msgid "You are not allowed to change these settings."
+msgstr "Nie masz uprawnień do zmiany tych ustawień."
+

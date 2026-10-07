@@ -1,0 +1,21 @@
+{
+    "name": "affiwave/affiwave-woocommerce",
+    "description": "AffiWave for WooCommerce — affiliate click attribution, S2S conversions and partner coupons.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload-dev": {
+        "psr-4": { "AffiWave\\WooCommerce\\": "src/", "AffiWave\\WooCommerce\\Tests\\": "tests/" }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
