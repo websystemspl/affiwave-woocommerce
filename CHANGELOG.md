@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 — 2026-10-08
+
+- **Updates from GitHub Releases**: the plugin shows up in Dashboard → Updates and the plugin list like any other,
+  with "View details" (release notes) and one-click / automatic updates (`Update URI` header + `update_plugins_github.com`).
+  Latest release cached for 6 h; "Check again" skips the cache. Installed under another directory name, it is updated in place.
+
 ## 0.2.0 — 2026-10-08
 
 - **Integration key**: paste one key from AffiWave → Integrations → WordPress → Configure instead of four values;

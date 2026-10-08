@@ -15,6 +15,14 @@ Official WordPress plugin connecting a WooCommerce store to an [AffiWave](https:
 Download **[affiwave-woocommerce.zip](https://github.com/websystemspl/affiwave-woocommerce/releases/latest/download/affiwave-woocommerce.zip)**
 (latest release) and upload it in **Plugins → Add New → Upload Plugin**. WooCommerce is required.
 
+## Updates
+
+The plugin updates itself from [GitHub Releases](https://github.com/websystemspl/affiwave-woocommerce/releases):
+a new release appears in **Dashboard → Updates** and on the plugin list (with *View details* and the release notes),
+works with one-click and automatic updates and with `wp plugin update`. The latest release is checked at most every
+6 hours (anonymous GitHub API); *Check again* in Dashboard → Updates checks right away. Versions before 0.3.0 have no
+updater — install 0.3.0 once by hand.
+
 ## Setup
 
 1. AffiWave: **Integrations → WordPress → Configure** — choose the program, enter the shop address and generate an
@@ -62,8 +70,23 @@ wp affiwave sync-coupons [--since=2026-01-01T00:00:00+00:00]
 ## Development
 
 ```bash
-composer install && vendor/bin/phpunit          # unit tests (signature, money, coupon mapping, integration key)
+composer install && vendor/bin/phpunit          # unit tests (signature, money, coupon mapping, integration key, release)
 bin/build-zip.sh                                # build/affiwave-woocommerce.zip for a release
+```
+
+Release: bump the version (plugin header, `AFFIWAVE_WC_VERSION`, `readme.txt` Stable tag, `CHANGELOG.md`), then
+
+```bash
+git tag vX.Y.Z && git push origin main vX.Y.Z
+gh release create vX.Y.Z build/affiwave-woocommerce.zip --title "AffiWave for WooCommerce X.Y.Z" --notes "..."
+```
+
+The zip asset must keep its name (`affiwave-woocommerce.zip`) — the updater and the AffiWave download link use it.
+Before publishing in the wordpress.org directory remove `src/Updater.php` and the `Update URI` header.
+
+Dev shop:
+
+```bash
 cd dev && docker compose up -d --build && ./setup.sh   # shop at http://affiwave-wc.localhost (admin/admin)
 ```
 

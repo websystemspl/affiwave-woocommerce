@@ -4,7 +4,7 @@ Tags: affiliate, woocommerce, referral, coupons, subscriptions
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,6 +16,7 @@ Connect WooCommerce to an AffiWave affiliate program: partner click attribution,
 * Reports every paid order — including subscription renewals — to AffiWave as a conversion (net amount, order currency), in the background, without duplicates; refunds included.
 * Creates and updates WooCommerce coupons from AffiWave partner coupons (signed webhooks + hourly sync).
 * Settings page, wp-config.php constants, WP-CLI commands, HPOS and block checkout support.
+* Updates itself from GitHub Releases.
 
 This plugin sends order data (order id, net amount, currency, payment date, customer e-mail, partner click token or coupon code) to the AffiWave server configured in its settings (default https://affiwave.com). Nothing is sent until an API key is set. AffiWave terms: https://affiwave.com/terms — privacy policy: https://affiwave.com/privacy
 
@@ -26,6 +27,9 @@ This plugin sends order data (order id, net amount, currency, payment date, cust
 3. Paste the integration key in WooCommerce → AffiWave, save and click Test connection.
 
 == Changelog ==
+
+= 0.3.0 =
+* Updates from GitHub Releases (Dashboard → Updates, View details, automatic updates).
 
 = 0.2.0 =
 * Integration key generated in AffiWave fills in the whole configuration.
