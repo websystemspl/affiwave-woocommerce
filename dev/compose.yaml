@@ -1,4 +1,4 @@
-# AffiWave for WooCommerce — dev shop at http://affiwave-wc.localhost (see dev/README.md).
+# AffiWave for WooCommerce — dev shop at http://affiwave-wc.localhost (see README.md → Development).
 # Optional external networks of the Web Systems dev machine: narzedzia-proxy (Traefik), traefik-public (reach a local
 # AffiWave as http://affiwave-internal), mailpit. Elsewhere: drop them and publish nginx on a port.
 name: affiwave-wc

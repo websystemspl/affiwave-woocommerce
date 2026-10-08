@@ -4,7 +4,7 @@ Tags: affiliate, woocommerce, referral, coupons, subscriptions
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,10 +22,13 @@ This plugin sends order data (order id, net amount, currency, payment date, cust
 == Installation ==
 
 1. Upload and activate the plugin (WooCommerce required).
-2. In AffiWave set the program attribution parameter to `aw_click`, create an API key (conversions:write, reports:read) and a webhook (coupon.created, coupon.updated) to the URL shown in WooCommerce → AffiWave.
-3. Enter the address, API key, webhook secret and program ID in WooCommerce → AffiWave and click Test connection.
+2. In AffiWave open Integrations → WordPress → Configure, choose the program, enter the shop address and generate an integration key.
+3. Paste the integration key in WooCommerce → AffiWave, save and click Test connection.
 
 == Changelog ==
+
+= 0.2.0 =
+* Integration key generated in AffiWave fills in the whole configuration.
 
 = 0.1.0 =
 * First version.

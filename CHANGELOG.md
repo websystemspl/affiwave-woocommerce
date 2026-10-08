@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0 — 2026-10-08
+
+- **Integration key**: paste one key from AffiWave → Integrations → WordPress → Configure instead of four values;
+  AffiWave creates the API key and the coupon webhook for the shop.
+- `bin/build-zip.sh` builds the installable `affiwave-woocommerce.zip` attached to every GitHub release.
+
 ## 0.1.0 — 2026-10-07
 
 First version (first deployment: Botino).

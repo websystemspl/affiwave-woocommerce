@@ -7,8 +7,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Domain: affiwave-woocommerce\n"
 
-msgid "Add it in AffiWave → Webhooks with the events coupon.created and coupon.updated."
-msgstr "Dodaj go w AffiWave → Webhooki ze zdarzeniami coupon.created i coupon.updated."
 
 msgid "AffiWave → Settings → API keys. Scopes: conversions:write and reports:read."
 msgstr "AffiWave → Ustawienia → Klucze API. Uprawnienia: conversions:write i reports:read."
@@ -94,3 +92,14 @@ msgstr "Adres webhooka"
 msgid "You are not allowed to change these settings."
 msgstr "Nie masz uprawnień do zmiany tych ustawień."
 
+msgid "Integration key"
+msgstr "Klucz integracji"
+
+msgid "Generate it in AffiWave → Integrations → WordPress → Configure and paste it here. It fills in the address, API key, webhook secret and program ID below — and creates the coupon webhook for this shop on the AffiWave side."
+msgstr "Wygeneruj go w AffiWave → Integracje → WordPress → Konfiguracja i wklej tutaj. Uzupełnia adres, klucz API, sekret webhooka i ID programu poniżej — a po stronie AffiWave tworzy webhook kuponów dla tego sklepu."
+
+msgid "This is not a valid integration key. Copy it again from AffiWave → Integrations → WordPress → Configure."
+msgstr "To nie jest poprawny klucz integracji. Skopiuj go ponownie z AffiWave → Integracje → WordPress → Konfiguracja."
+
+msgid "With an integration key AffiWave already sends coupons here. Setting it up by hand: add it in AffiWave → Webhooks with the events coupon.created and coupon.updated."
+msgstr "Z kluczem integracji AffiWave wysyła już tu kupony. Konfiguracja ręczna: dodaj go w AffiWave → Webhooki ze zdarzeniami coupon.created i coupon.updated."

@@ -1,7 +1,6 @@
 <?php
 // Generated from affiwave-woocommerce-pl_PL.po (WordPress 6.5+ PHP translation file).
 return ['domain' => 'affiwave-woocommerce', 'plural-forms' => 'nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);', 'language' => 'pl_PL', 'messages' => [
-	'Add it in AffiWave → Webhooks with the events coupon.created and coupon.updated.' => 'Dodaj go w AffiWave → Webhooki ze zdarzeniami coupon.created i coupon.updated.',
 	'AffiWave → Settings → API keys. Scopes: conversions:write and reports:read.' => 'AffiWave → Ustawienia → Klucze API. Uprawnienia: conversions:write i reports:read.',
 	'AffiWave address' => 'Adres AffiWave',
 	'AffiWave: conversion refunded.' => 'AffiWave: konwersja wycofana (zwrot).',
@@ -30,4 +29,8 @@ return ['domain' => 'affiwave-woocommerce', 'plural-forms' => 'nplurals=3; plura
 	'Webhook secret' => 'Sekret webhooka',
 	'Webhook URL' => 'Adres webhooka',
 	'You are not allowed to change these settings.' => 'Nie masz uprawnień do zmiany tych ustawień.',
+	'Integration key' => 'Klucz integracji',
+	'Generate it in AffiWave → Integrations → WordPress → Configure and paste it here. It fills in the address, API key, webhook secret and program ID below — and creates the coupon webhook for this shop on the AffiWave side.' => 'Wygeneruj go w AffiWave → Integracje → WordPress → Konfiguracja i wklej tutaj. Uzupełnia adres, klucz API, sekret webhooka i ID programu poniżej — a po stronie AffiWave tworzy webhook kuponów dla tego sklepu.',
+	'This is not a valid integration key. Copy it again from AffiWave → Integrations → WordPress → Configure.' => 'To nie jest poprawny klucz integracji. Skopiuj go ponownie z AffiWave → Integracje → WordPress → Konfiguracja.',
+	'With an integration key AffiWave already sends coupons here. Setting it up by hand: add it in AffiWave → Webhooks with the events coupon.created and coupon.updated.' => 'Z kluczem integracji AffiWave wysyła już tu kupony. Konfiguracja ręczna: dodaj go w AffiWave → Webhooki ze zdarzeniami coupon.created i coupon.updated.',
 ]];

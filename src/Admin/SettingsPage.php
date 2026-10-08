@@ -9,6 +9,7 @@ namespace AffiWave\WooCommerce\Admin;
 
 use AffiWave\WooCommerce\ApiClient;
 use AffiWave\WooCommerce\CouponSync;
+use AffiWave\WooCommerce\IntegrationKey;
 use AffiWave\WooCommerce\Settings;
 use AffiWave\WooCommerce\WebhookController;
 
@@ -49,6 +50,19 @@ final class SettingsPage {
 		$input  = isset( $_POST['affiwave'] ) && is_array( $_POST['affiwave'] ) ? wp_unslash( $_POST['affiwave'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized in Settings::save().
 		$stored = get_option( Settings::OPTION, array() );
 		$stored = is_array( $stored ) ? $stored : array();
+
+		// The integration key from AffiWave fills address, API key, webhook secret and program ID in one go.
+		$integration_key = trim( (string) ( $input['integration_key'] ?? '' ) );
+		unset( $input['integration_key'] );
+		if ( '' !== $integration_key ) {
+			$decoded = IntegrationKey::decode( $integration_key );
+			if ( null === $decoded ) {
+				wp_safe_redirect( add_query_arg( array( 'page' => self::SLUG, 'invalid_key' => '1' ), admin_url( 'admin.php' ) ) );
+				exit;
+			}
+			$input = array_merge( $input, $decoded );
+		}
+
 		foreach ( self::SECRET as $key ) {
 			// An empty secret field means "keep the stored value"; the stored value is never printed back.
 			if ( '' === trim( (string) ( $input[ $key ] ?? '' ) ) ) {
@@ -93,6 +107,9 @@ final class SettingsPage {
 			<?php if ( isset( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
 				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings saved.', 'affiwave-woocommerce' ); ?></p></div>
 			<?php endif; ?>
+			<?php if ( isset( $_GET['invalid_key'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+				<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'This is not a valid integration key. Copy it again from AffiWave → Integrations → WordPress → Configure.', 'affiwave-woocommerce' ); ?></p></div>
+			<?php endif; ?>
 			<?php if ( isset( $_GET['tested'] ) && false !== $test ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
 				<div class="notice <?php echo 'ok' === $test ? 'notice-success' : 'notice-error'; ?> is-dismissible"><p>
 					<?php
@@ -110,6 +127,14 @@ final class SettingsPage {
 				<input type="hidden" name="action" value="affiwave_wc_save">
 				<?php wp_nonce_field( 'affiwave_wc_save' ); ?>
 				<table class="form-table" role="presentation">
+					<tr>
+						<th scope="row"><label for="affiwave-integration_key"><?php esc_html_e( 'Integration key', 'affiwave-woocommerce' ); ?></label></th>
+						<td>
+							<textarea class="large-text code" rows="3" id="affiwave-integration_key" name="affiwave[integration_key]" autocomplete="off" spellcheck="false"
+								placeholder="awi1_…"></textarea>
+							<p class="description"><?php esc_html_e( 'Generate it in AffiWave → Integrations → WordPress → Configure and paste it here. It fills in the address, API key, webhook secret and program ID below — and creates the coupon webhook for this shop on the AffiWave side.', 'affiwave-woocommerce' ); ?></p>
+						</td>
+					</tr>
 					<?php foreach ( $fields as $key => [ $label, $type, $help ] ) : ?>
 						<?php
 						$locked = $this->settings->is_locked( $key );
@@ -135,7 +160,7 @@ final class SettingsPage {
 					<tr>
 						<th scope="row"><?php esc_html_e( 'Webhook URL', 'affiwave-woocommerce' ); ?></th>
 						<td><code><?php echo esc_html( WebhookController::url() ); ?></code>
-							<p class="description"><?php esc_html_e( 'Add it in AffiWave → Webhooks with the events coupon.created and coupon.updated.', 'affiwave-woocommerce' ); ?></p></td>
+							<p class="description"><?php esc_html_e( 'With an integration key AffiWave already sends coupons here. Setting it up by hand: add it in AffiWave → Webhooks with the events coupon.created and coupon.updated.', 'affiwave-woocommerce' ); ?></p></td>
 					</tr>
 					<tr>
 						<th scope="row"><?php esc_html_e( 'Last coupon sync', 'affiwave-woocommerce' ); ?></th>

@@ -10,12 +10,21 @@ Official WordPress plugin connecting a WooCommerce store to an [AffiWave](https:
 | Refund | A fully refunded, reported order → `POST /api/conversion/refund`. |
 | Partner coupons | Webhooks `coupon.created` / `coupon.updated` → `POST /wp-json/affiwave/v1/webhook` (signature `X-AffiWave-Signature`, 300 s window) create/update a WooCommerce coupon (percentage → percent, fixed → fixed cart, active → published, disabled/expired → draft). Hourly safety-net sync: `GET /api/coupon_codes?changedSince=`. With a **Program ID** set, coupons of other programs of the same AffiWave account are ignored. Codes made outside AffiWave are never overwritten (409). |
 
+## Installation
+
+Download **[affiwave-woocommerce.zip](https://github.com/websystemspl/affiwave-woocommerce/releases/latest/download/affiwave-woocommerce.zip)**
+(latest release) and upload it in **Plugins → Add New → Upload Plugin**. WooCommerce is required.
+
 ## Setup
 
-1. AffiWave: program → attribution parameter `aw_click`; API key with scopes `conversions:write` and `reports:read`;
-   webhook with events `coupon.created`, `coupon.updated` pointing to the URL shown in the plugin settings.
-2. WordPress: **WooCommerce → AffiWave** — address, API key, webhook secret, program ID, order prefix, cookie days;
-   *Test connection*. Empty address or key = nothing is sent.
+1. AffiWave: **Integrations → WordPress → Configure** — choose the program, enter the shop address and generate an
+   **integration key**. AffiWave creates an API key (`conversions:write`, `reports:read`), a coupon webhook
+   (`coupon.created`, `coupon.updated`) to the shop and sets the program attribution parameter to `aw_click`.
+2. WordPress: **WooCommerce → AffiWave** — paste the integration key, save, *Test connection*.
+   Empty address or key = nothing is sent.
+
+Setting it up by hand instead: in AffiWave set the program attribution parameter `aw_click`, create the API key and the
+webhook to the URL shown in the plugin settings, then fill in address, API key, webhook secret and program ID.
 
 Every setting can be fixed in `wp-config.php` (the field is then locked in wp-admin):
 
@@ -53,7 +62,8 @@ wp affiwave sync-coupons [--since=2026-01-01T00:00:00+00:00]
 ## Development
 
 ```bash
-composer install && vendor/bin/phpunit          # unit tests (signature, money, coupon mapping)
+composer install && vendor/bin/phpunit          # unit tests (signature, money, coupon mapping, integration key)
+bin/build-zip.sh                                # build/affiwave-woocommerce.zip for a release
 cd dev && docker compose up -d --build && ./setup.sh   # shop at http://affiwave-wc.localhost (admin/admin)
 ```
 
