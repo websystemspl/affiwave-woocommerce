@@ -43,7 +43,7 @@ services:
 networks:
   narzedzia-proxy: { external: true }
   traefik-public: { external: true }
-  mailpit: { external: true }
+  mailpit: { name: narzedzia-mail, external: true }
 
 volumes:
   wordpress:
