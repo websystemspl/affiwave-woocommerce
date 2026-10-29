@@ -3,7 +3,7 @@
  * Plugin Name:       AffiWave for WooCommerce
  * Plugin URI:        https://github.com/websystemspl/affiwave-woocommerce
  * Description:       Connects your WooCommerce store to an AffiWave affiliate program: remembers partner clicks, reports every paid order (including subscription renewals) as a server-to-server conversion and keeps partner coupon codes in sync.
- * Version:           0.3.0
+ * Version:           0.3.1
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -22,7 +22,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AFFIWAVE_WC_VERSION', '0.3.0' );
+define( 'AFFIWAVE_WC_VERSION', '0.3.1' );
 define( 'AFFIWAVE_WC_FILE', __FILE__ );
 define( 'AFFIWAVE_WC_DIR', __DIR__ );
 

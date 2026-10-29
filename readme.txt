@@ -4,7 +4,7 @@ Tags: affiliate, woocommerce, referral, coupons, subscriptions
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.3.0
+Stable tag: 0.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,10 +23,14 @@ This plugin sends order data (order id, net amount, currency, payment date, cust
 == Installation ==
 
 1. Upload and activate the plugin (WooCommerce required).
-2. In AffiWave open Integrations → WordPress → Configure, choose the program, enter the shop address and generate an integration key.
+2. In AffiWave open Integrations → WordPress → Configure, choose the program (one key covers all its approved domains) and generate an integration key.
 3. Paste the integration key in WooCommerce → AffiWave, save and click Test connection.
 
 == Changelog ==
+
+= 0.3.1 =
+* The order id sent to AffiWave is stored on the order and reused by retries and refunds (shops on several domains, e.g. WPML).
+* Integration key per program in AffiWave: one key for every approved domain of the program.
 
 = 0.3.0 =
 * Updates from GitHub Releases (Dashboard → Updates, View details, automatic updates).

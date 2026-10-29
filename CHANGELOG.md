@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 — 2026-10-29
+
+- **Stable `external_order_id`**: the id sent with the first report is stored on the order (`_affiwave_external_order_id`)
+  and reused by retries and the refund. The default prefix is the host of `home_url()`, which on a shop with a domain per
+  language (WPML: `www.botino.eu` / `www.botino.pl`) depends on the request that runs the background job — a refund
+  could miss its conversion and a retry could report it twice. Orders reported by 0.3.0 fall back to the current prefix.
+- AffiWave generates **one integration key per program**, valid for every approved domain of the program.
+
 ## 0.3.0 — 2026-10-08
 
 - **Updates from GitHub Releases**: the plugin shows up in Dashboard → Updates and the plugin list like any other,

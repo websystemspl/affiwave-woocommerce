@@ -4,7 +4,9 @@
  * plugin that creates a regular order per renewal) — to AffiWave as a server-to-server conversion.
  *
  * - amount: net (order total minus its tax), in the order currency;
- * - external_order_id: "<prefix><order id>", so AffiWave de-duplicates repeats (200 duplicate);
+ * - external_order_id: "<prefix><order id>", so AffiWave de-duplicates repeats (200 duplicate); stored on the order before
+ *   the first request and reused by retries and the refund — the default prefix is the host of home_url(), which differs
+ *   per request on a shop with a domain per language (WPML), and background jobs run from any of them;
  * - sent in the background (Action Scheduler), never during checkout; a stamp on the order stops repeats;
  * - network or 5xx errors are retried by the hourly catch-up (and `wp affiwave report`); a 4xx is final and noted.
  * - refunds: a fully refunded order that was reported is refunded in AffiWave too.
@@ -26,6 +28,7 @@ final class ConversionReporter {
 	public const CONVERSION_ID = '_affiwave_conversion_id';
 	public const FAILED        = '_affiwave_failed';
 	public const REFUNDED_AT   = '_affiwave_refunded_at';
+	public const EXTERNAL_ID   = '_affiwave_external_order_id';
 
 	public function __construct( private Settings $settings, private ApiClient $api, private Attribution $attribution ) {
 	}
@@ -93,11 +96,17 @@ final class ConversionReporter {
 			return 'skipped:zero_amount';
 		}
 
+		$external_id = $this->external_id( $order );
+		if ( '' === (string) $order->get_meta( self::EXTERNAL_ID ) ) {
+			$order->update_meta_data( self::EXTERNAL_ID, $external_id );
+			$order->save();
+		}
+
 		$payload = array(
 			$referral['type']   => $referral['value'],
 			'amount'            => $amount,
 			'currency'          => strtoupper( $order->get_currency() ),
-			'external_order_id' => $this->external_id( $order ),
+			'external_order_id' => $external_id,
 		);
 		if ( null !== $paid_at ) {
 			$payload['occurred_at'] = $paid_at->format( DATE_ATOM );
@@ -201,8 +210,11 @@ final class ConversionReporter {
 		return $outcome;
 	}
 
+	/** The id sent with the first report; orders reported before 0.3.1 fall back to the current prefix. */
 	public function external_id( \WC_Order $order ): string {
-		return $this->settings->order_prefix() . $order->get_id();
+		$stored = (string) $order->get_meta( self::EXTERNAL_ID );
+
+		return '' !== $stored ? $stored : $this->settings->order_prefix() . $order->get_id();
 	}
 
 	private function enqueue( string $hook, int $order_id ): void {
