@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.2 — 2026-10-29
+
+- **Stored integration key is visible masked**: the settings screen shows `awi1_•••••••• (ak_1a2b3c4d.••••••••)` and
+  "Stored: API key …, connected …" instead of an empty field — the API key prefix is the one AffiWave lists next to the
+  shop. API key and webhook secret fields show their masked value too; secrets are never printed.
+- **Last coupon sync** shows when the sync last ran (hourly job, button or WP-CLI) with fetched / saved / errors and the
+  error message. It used to print the API cursor, which stays at `1970-01-01` until the first coupon arrives — it looked
+  as if the sync had never run. New button **Sync coupons now**; `wp affiwave status` shows the same.
+- AffiWave card name: Integrations → **WooCommerce (WordPress)** → Configure.
+
 ## 0.3.1 — 2026-10-29
 
 - **Stable `external_order_id`**: the id sent with the first report is stored on the order (`_affiwave_external_order_id`)

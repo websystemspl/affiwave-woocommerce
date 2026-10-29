@@ -31,6 +31,8 @@ final class Settings {
 		'program_id'     => '',
 		'order_prefix'   => '',
 		'cookie_days'    => '30',
+		// When the integration key was last pasted (shown on the settings screen; not a secret, no wp-config constant).
+		'connected_at'   => '',
 	);
 
 	/** @var array<string, string>|null */

@@ -25,7 +25,7 @@ updater — install 0.3.0 once by hand.
 
 ## Setup
 
-1. AffiWave: **Integrations → WordPress → Configure** — choose the program, enter the shop address and generate an
+1. AffiWave: **Integrations → WooCommerce (WordPress) → Configure** — choose the program, enter the shop address and generate an
    **integration key**. AffiWave creates an API key (`conversions:write`, `reports:read`), a coupon webhook
    (`coupon.created`, `coupon.updated`) to the shop and sets the program attribution parameter to `aw_click`.
 2. WordPress: **WooCommerce → AffiWave** — paste the integration key, save, *Test connection*.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Integration key generated in AffiWave → Integrations → WordPress → Configure: one string that carries the AffiWave
+ * Integration key generated in AffiWave → Integrations → WooCommerce (WordPress) → Configure: one string that carries the AffiWave
  * address, the API key, the webhook secret and the program ID, so the shop owner pastes one value instead of four.
  *
  * Format: "awi1_" + base64url(JSON {"u": url, "k": api key, "s": webhook secret, "p": program id}).
@@ -15,6 +15,20 @@ defined( 'ABSPATH' ) || exit;
 final class IntegrationKey {
 
 	public const PREFIX = 'awi1_';
+
+	/**
+	 * Masked form of a stored secret for the settings screen: the public part of an AffiWave API key ("ak_1a2b3c4d", the
+	 * same prefix AffiWave lists next to the shop) or the first characters of any other value, then dots. Never the secret.
+	 */
+	public static function mask( string $secret ): string {
+		$secret = trim( $secret );
+		if ( '' === $secret ) {
+			return '';
+		}
+		$dot = strpos( $secret, '.' );
+
+		return ( false !== $dot && $dot <= 16 ? substr( $secret, 0, $dot + 1 ) : substr( $secret, 0, min( 6, intdiv( strlen( $secret ), 3 ) ) ) ) . '••••••••';
+	}
 
 	/**
 	 * Decodes the key into setting values (api_url, api_key, webhook_secret, program_id) or returns null when the key

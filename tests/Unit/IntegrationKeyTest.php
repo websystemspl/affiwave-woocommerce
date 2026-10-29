@@ -37,4 +37,12 @@ final class IntegrationKeyTest extends TestCase
         self::assertNull(IntegrationKey::decode(IntegrationKey::encode('ftp://x', 'ak_x.y', 's', 1)));
         self::assertNull(IntegrationKey::decode(IntegrationKey::encode('https://affiwave.com', '', 's', 1)));
     }
+
+    public function testMasksSecretsWithoutRevealingThem(): void
+    {
+        self::assertSame('ak_1a2b3c4d.••••••••', IntegrationKey::mask('ak_1a2b3c4d.' . str_repeat('f', 48)));
+        self::assertSame('whsec_••••••••', IntegrationKey::mask('whsec_' . str_repeat('a', 40)));
+        self::assertSame('ab••••••••', IntegrationKey::mask('abcdefg'));
+        self::assertSame('', IntegrationKey::mask('  '));
+    }
 }

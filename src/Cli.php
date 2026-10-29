@@ -23,12 +23,15 @@ final class Cli {
 		$s = $this->plugin->settings;
 		\WP_CLI::line( 'Enabled:        ' . ( $s->is_enabled() ? 'yes' : 'no (API URL or key missing)' ) );
 		\WP_CLI::line( 'API URL:        ' . $s->api_url() );
-		\WP_CLI::line( 'API key:        ' . ( '' !== $s->get( 'api_key' ) ? 'set' : 'missing' ) );
+		\WP_CLI::line( 'API key:        ' . ( '' !== $s->get( 'api_key' ) ? IntegrationKey::mask( $s->get( 'api_key' ) ) : 'missing' ) );
+		\WP_CLI::line( 'Connected:      ' . ( '' !== $s->get( 'connected_at' ) ? $s->get( 'connected_at' ) : 'unknown (set before 0.3.2 or by hand)' ) );
 		\WP_CLI::line( 'Webhook secret: ' . ( '' !== $s->get( 'webhook_secret' ) ? 'set' : 'missing (coupon webhooks answer 503)' ) );
 		\WP_CLI::line( 'Program id:     ' . ( $s->program_id() ?? 'any (no filter)' ) );
 		\WP_CLI::line( 'Order prefix:   ' . $s->order_prefix() );
 		\WP_CLI::line( 'Webhook URL:    ' . WebhookController::url() );
-		\WP_CLI::line( 'Coupons synced: ' . get_option( CouponSync::SYNCED_AT, 'never' ) );
+		$run = get_option( CouponSync::LAST_RUN );
+		\WP_CLI::line( 'Coupon sync:    ' . ( is_array( $run ) && isset( $run['at'] ) ? gmdate( DATE_ATOM, (int) $run['at'] ) . sprintf( ' (fetched %d, saved %d, errors %d) %s', $run['fetched'] ?? 0, $run['saved'] ?? 0, $run['errors'] ?? 0, $run['error'] ?? '' ) : 'not run yet' ) );
+		\WP_CLI::line( 'Coupon cursor:  ' . get_option( CouponSync::SYNCED_AT, '1970-01-01T00:00:00+00:00' ) . ' (last change in AffiWave received; 1970 = no coupons yet)' );
 	}
 
 	/**

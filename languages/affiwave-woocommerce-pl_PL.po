@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: AffiWave for WooCommerce 0.1.0\n"
+"Project-Id-Version: AffiWave for WooCommerce 0.3.2\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -95,11 +95,35 @@ msgstr "Nie masz uprawnień do zmiany tych ustawień."
 msgid "Integration key"
 msgstr "Klucz integracji"
 
-msgid "Generate it in AffiWave → Integrations → WordPress → Configure and paste it here. It fills in the address, API key, webhook secret and program ID below — and creates the coupon webhook for this shop on the AffiWave side."
-msgstr "Wygeneruj go w AffiWave → Integracje → WordPress → Konfiguracja i wklej tutaj. Uzupełnia adres, klucz API, sekret webhooka i ID programu poniżej — a po stronie AffiWave tworzy webhook kuponów dla tego sklepu."
+msgid "Generate it in AffiWave → Integrations → WooCommerce (WordPress) → Configure and paste it here. It fills in the address, API key, webhook secret and program ID below — and creates the coupon webhook for this shop on the AffiWave side."
+msgstr "Wygeneruj go w AffiWave → Integracje → WooCommerce (WordPress) → Konfiguracja i wklej tutaj. Uzupełnia adres, klucz API, sekret webhooka i ID programu poniżej — a po stronie AffiWave tworzy webhook kuponów dla tego sklepu."
 
-msgid "This is not a valid integration key. Copy it again from AffiWave → Integrations → WordPress → Configure."
-msgstr "To nie jest poprawny klucz integracji. Skopiuj go ponownie z AffiWave → Integracje → WordPress → Konfiguracja."
+msgid "This is not a valid integration key. Copy it again from AffiWave → Integrations → WooCommerce (WordPress) → Configure."
+msgstr "To nie jest poprawny klucz integracji. Skopiuj go ponownie z AffiWave → Integracje → WooCommerce (WordPress) → Konfiguracja."
 
 msgid "With an integration key AffiWave already sends coupons here. Setting it up by hand: add it in AffiWave → Webhooks with the events coupon.created and coupon.updated."
 msgstr "Z kluczem integracji AffiWave wysyła już tu kupony. Konfiguracja ręczna: dodaj go w AffiWave → Webhooki ze zdarzeniami coupon.created i coupon.updated."
+
+msgid "Stored: API key %1$s, connected %2$s. Paste a new integration key only to replace it."
+msgstr "Zapisany: klucz API %1$s, połączono %2$s. Nowy klucz integracji wklej tylko, aby go zastąpić."
+
+msgid "Stored: API key %s. Paste a new integration key only to replace it."
+msgstr "Zapisany: klucz API %s. Nowy klucz integracji wklej tylko, aby go zastąpić."
+
+msgid "%1$s — fetched %2$d, saved %3$d, errors %4$d"
+msgstr "%1$s — pobrane %2$d, zapisane %3$d, błędy %4$d"
+
+msgid "not run yet — runs every hour"
+msgstr "jeszcze nie uruchomiona — działa co godzinę"
+
+msgid "No coupons received from AffiWave yet."
+msgstr "Z AffiWave nie przyszedł jeszcze żaden kupon."
+
+msgid "Coupons changed in AffiWave up to %s are in the shop."
+msgstr "Kupony zmienione w AffiWave do %s są już w sklepie."
+
+msgid "Sync coupons now"
+msgstr "Synchronizuj kupony teraz"
+
+msgid "Coupon sync finished — the result is shown under Last coupon sync."
+msgstr "Synchronizacja kuponów zakończona — wynik w wierszu „Ostatnia synchronizacja kuponów”."

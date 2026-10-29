@@ -21,6 +21,8 @@ final class CouponSync {
 
 	public const ACTION      = 'affiwave_wc_sync_coupons';
 	public const SYNCED_AT   = 'affiwave_wc_coupons_synced_at';
+	/** Last run of sync() (time and counts) - SYNCED_AT is only the API cursor and stays at 1970 until the first coupon. */
+	public const LAST_RUN    = 'affiwave_wc_coupons_last_run';
 	public const PROGRAM_META = '_affiwave_program_id';
 
 	/** @var array<int, int|null> campaign id => program id */
@@ -148,11 +150,13 @@ final class CouponSync {
 		}
 		$since = $since ?? (string) get_option( self::SYNCED_AT, '1970-01-01T00:00:00+00:00' );
 		$max   = $since;
+		$error = '';
 
 		for ( $page = 1; $page <= 100; $page++ ) {
 			$response = $this->api->get_coupon_codes( $since, $page );
 			if ( ! $response->ok() || ! is_array( $response->data ) ) {
-				$this->log( 'Coupon sync failed: ' . $response->summary() );
+				$error = $response->summary();
+				$this->log( 'Coupon sync failed: ' . $error );
 				++$stats['errors'];
 				break;
 			}
@@ -176,7 +180,8 @@ final class CouponSync {
 				}
 				$result = $this->upsert( $coupon );
 				if ( is_wp_error( $result ) ) {
-					$this->log( 'Coupon sync: ' . $result->get_error_message() );
+					$error = $result->get_error_message();
+					$this->log( 'Coupon sync: ' . $error );
 					++$stats['errors'];
 				} else {
 					++$stats['saved'];
@@ -190,6 +195,7 @@ final class CouponSync {
 		if ( 0 === $stats['errors'] ) {
 			update_option( self::SYNCED_AT, $max, false );
 		}
+		update_option( self::LAST_RUN, array( 'at' => time(), 'error' => $error ) + $stats, false );
 
 		return $stats;
 	}
