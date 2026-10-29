@@ -19,6 +19,8 @@ final class SettingsPage {
 
 	private const SLUG   = 'affiwave';
 	private const SECRET = array( 'api_key', 'webhook_secret' );
+	/** Value of a stored secret in the form (dots, never the secret); posted back unchanged = keep the stored value. */
+	private const KEEP = '••••••••••••••••••••';
 
 	public function __construct( private Settings $settings, private CouponSync $coupons ) {
 	}
@@ -55,7 +57,7 @@ final class SettingsPage {
 		// The integration key from AffiWave fills address, API key, webhook secret and program ID in one go.
 		$integration_key = trim( (string) ( $input['integration_key'] ?? '' ) );
 		unset( $input['integration_key'] );
-		if ( '' !== $integration_key ) {
+		if ( '' !== $integration_key && ! str_contains( $integration_key, '•' ) ) { // Dots = the stored key, unchanged.
 			$decoded = IntegrationKey::decode( $integration_key );
 			if ( null === $decoded ) {
 				wp_safe_redirect( add_query_arg( array( 'page' => self::SLUG, 'invalid_key' => '1' ), admin_url( 'admin.php' ) ) );
@@ -65,8 +67,9 @@ final class SettingsPage {
 		}
 
 		foreach ( array_merge( self::SECRET, array( 'connected_at' ) ) as $key ) {
-			// An empty secret field means "keep the stored value"; only its masked form is printed back.
-			if ( '' === trim( (string) ( $input[ $key ] ?? '' ) ) ) {
+			// A stored secret is printed back as dots (KEEP); dots or an empty field keep the stored value.
+			$posted = trim( (string) ( $input[ $key ] ?? '' ) );
+			if ( '' === $posted || str_contains( $posted, '•' ) ) {
 				$input[ $key ] = $stored[ $key ] ?? '';
 			}
 		}
@@ -115,7 +118,6 @@ final class SettingsPage {
 		);
 		$test      = get_transient( 'affiwave_wc_test_' . get_current_user_id() );
 		$api_key   = $this->settings->get( 'api_key' );
-		$connected = $this->settings->get( 'connected_at' );
 		$last_run  = get_option( CouponSync::LAST_RUN );
 		$cursor    = (string) get_option( CouponSync::SYNCED_AT, '' );
 		?>
@@ -151,20 +153,7 @@ final class SettingsPage {
 						<th scope="row"><label for="affiwave-integration_key"><?php esc_html_e( 'Integration key', 'affiwave-woocommerce' ); ?></label></th>
 						<td>
 							<textarea class="large-text code" rows="3" id="affiwave-integration_key" name="affiwave[integration_key]" autocomplete="off" spellcheck="false"
-								placeholder="<?php echo esc_attr( '' !== $api_key ? IntegrationKey::PREFIX . '•••••••• (' . IntegrationKey::mask( $api_key ) . ')' : IntegrationKey::PREFIX . '…' ); ?>"></textarea>
-							<?php if ( '' !== $api_key ) : ?>
-								<p><strong>
-									<?php
-									echo esc_html(
-										'' !== $connected
-											/* translators: 1: masked API key, e.g. "ak_1a2b3c4d.••••••••", 2: date and time */
-											? sprintf( __( 'Stored: API key %1$s, connected %2$s. Paste a new integration key only to replace it.', 'affiwave-woocommerce' ), IntegrationKey::mask( $api_key ), $this->date( (int) strtotime( $connected ) ) )
-											/* translators: %s: masked API key, e.g. "ak_1a2b3c4d.••••••••" */
-											: sprintf( __( 'Stored: API key %s. Paste a new integration key only to replace it.', 'affiwave-woocommerce' ), IntegrationKey::mask( $api_key ) )
-									);
-									?>
-								</strong></p>
-							<?php endif; ?>
+								placeholder="<?php echo esc_attr( IntegrationKey::PREFIX . '…' ); ?>"><?php echo esc_textarea( '' !== $api_key ? IntegrationKey::PREFIX . self::KEEP . self::KEEP : '' ); ?></textarea>
 							<p class="description"><?php esc_html_e( 'Generate it in AffiWave → Integrations → WooCommerce (WordPress) → Configure and paste it here. It fills in the address, API key, webhook secret and program ID below — and creates the coupon webhook for this shop on the AffiWave side.', 'affiwave-woocommerce' ); ?></p>
 						</td>
 					</tr>
@@ -172,19 +161,15 @@ final class SettingsPage {
 						<?php
 						$locked = $this->settings->is_locked( $key );
 						$secret = in_array( $key, self::SECRET, true );
-						$value  = $secret ? '' : $this->settings->get( $key );
+						$value  = $secret ? ( '' !== $this->settings->get( $key ) ? self::KEEP : '' ) : $this->settings->get( $key );
 						?>
 						<tr>
 							<th scope="row"><label for="affiwave-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th>
 							<td>
 								<input class="regular-text" id="affiwave-<?php echo esc_attr( $key ); ?>" name="affiwave[<?php echo esc_attr( $key ); ?>]"
-									type="<?php echo esc_attr( $type ); ?>" value="<?php echo esc_attr( $value ); ?>" autocomplete="off"
-									<?php disabled( $locked ); ?>
-									<?php if ( $secret && '' !== $this->settings->get( $key ) ) : ?>placeholder="<?php echo esc_attr( IntegrationKey::mask( $this->settings->get( $key ) ) ); ?>"<?php endif; ?>>
+									type="<?php echo esc_attr( $type ); ?>" value="<?php echo esc_attr( $value ); ?>" autocomplete="<?php echo $secret ? 'new-password' : 'off'; ?>"
+									<?php disabled( $locked ); ?>>
 								<p class="description">
-									<?php if ( $secret && '' !== $this->settings->get( $key ) ) : ?>
-										<strong><?php esc_html_e( 'stored — leave empty to keep', 'affiwave-woocommerce' ); ?></strong><br>
-									<?php endif; ?>
 									<?php echo esc_html( $help ); ?>
 									<?php if ( $locked ) : ?>
 										<br><strong><?php echo esc_html( sprintf( /* translators: %s: constant name */ __( 'Set in wp-config.php (%s).', 'affiwave-woocommerce' ), Settings::CONSTANTS[ $key ] ) ); ?></strong>

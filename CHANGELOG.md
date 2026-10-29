@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.3 — 2026-10-29
+
+- Stored secrets are shown **as dots in the fields themselves**: the integration key field contains `awi1_••••…`, the API key
+  and webhook secret are password fields with a dotted value (never the secret) — like a saved password. 0.3.2 showed only
+  a grey hint and extra notes ("Stored: …", "stored — leave empty to keep"), which are gone. Saving with the dots unchanged
+  keeps the stored values; pasting a new integration key replaces them.
+
 ## 0.3.2 — 2026-10-29
 
 - **Stored integration key is visible masked**: the settings screen shows `awi1_•••••••• (ak_1a2b3c4d.••••••••)` and

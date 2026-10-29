@@ -77,9 +77,6 @@ msgstr "Ustawienia zapisane."
 msgid "Shown once when you add the webhook below in AffiWave → Webhooks (events coupon.created and coupon.updated)."
 msgstr "Pokazywany raz, gdy dodajesz poniższy webhook w AffiWave → Webhooki (zdarzenia coupon.created i coupon.updated)."
 
-msgid "stored — leave empty to keep"
-msgstr "zapisany — zostaw puste, aby zachować"
-
 msgid "Test connection"
 msgstr "Sprawdź połączenie"
 
@@ -103,12 +100,6 @@ msgstr "To nie jest poprawny klucz integracji. Skopiuj go ponownie z AffiWave �
 
 msgid "With an integration key AffiWave already sends coupons here. Setting it up by hand: add it in AffiWave → Webhooks with the events coupon.created and coupon.updated."
 msgstr "Z kluczem integracji AffiWave wysyła już tu kupony. Konfiguracja ręczna: dodaj go w AffiWave → Webhooki ze zdarzeniami coupon.created i coupon.updated."
-
-msgid "Stored: API key %1$s, connected %2$s. Paste a new integration key only to replace it."
-msgstr "Zapisany: klucz API %1$s, połączono %2$s. Nowy klucz integracji wklej tylko, aby go zastąpić."
-
-msgid "Stored: API key %s. Paste a new integration key only to replace it."
-msgstr "Zapisany: klucz API %s. Nowy klucz integracji wklej tylko, aby go zastąpić."
 
 msgid "%1$s — fetched %2$d, saved %3$d, errors %4$d"
 msgstr "%1$s — pobrane %2$d, zapisane %3$d, błędy %4$d"
