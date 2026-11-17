@@ -8,7 +8,7 @@
  *
  * Mapping: percentage -> "percent", fixed -> "fixed_cart" (the AffiWave amount is gross, in the program currency);
  * status active -> published, expired/disabled -> draft (WooCommerce rejects unpublished coupons); usage limit and
- * expiry date 1:1. Coupons of other programs of the same AffiWave account are ignored when a program id is set.
+ * expiry date 1:1.
  *
  * @package AffiWave\WooCommerce
  */
@@ -23,10 +23,6 @@ final class CouponSync {
 	public const SYNCED_AT   = 'affiwave_wc_coupons_synced_at';
 	/** Last run of sync() (time and counts) - SYNCED_AT is only the API cursor and stays at 1970 until the first coupon. */
 	public const LAST_RUN    = 'affiwave_wc_coupons_last_run';
-	public const PROGRAM_META = '_affiwave_program_id';
-
-	/** @var array<int, int|null> campaign id => program id */
-	private array $campaign_programs = array();
 
 	public function __construct( private Settings $settings, private ApiClient $api ) {
 	}
@@ -39,7 +35,7 @@ final class CouponSync {
 	 * Normalized coupon from a webhook `data` object or an API resource.
 	 *
 	 * @param array<string, mixed> $data
-	 * @return array{id: int, code: string, type: string, value: string, currency: string, status: string, usage_limit: int|null, expires_at: string|null, program_id: int|null, campaign_id: int|null, affiliate_id: int|null}|null
+	 * @return array{id: int, code: string, type: string, value: string, currency: string, status: string, usage_limit: int|null, expires_at: string|null, campaign_id: int|null, affiliate_id: int|null}|null
 	 */
 	public static function normalize( array $data ): ?array {
 		$id   = (int) ( $data['coupon_id'] ?? $data['id'] ?? 0 );
@@ -57,7 +53,6 @@ final class CouponSync {
 			'status'       => (string) ( $data['status'] ?? 'active' ),
 			'usage_limit'  => isset( $data['usage_limit'] ) || isset( $data['usageLimit'] ) ? (int) ( $data['usage_limit'] ?? $data['usageLimit'] ) : null,
 			'expires_at'   => ( $data['expires_at'] ?? $data['expiresAt'] ?? null ) ?: null,
-			'program_id'   => isset( $data['program_id'] ) ? (int) $data['program_id'] : null,
 			'campaign_id'  => self::id_of( $data['campaign_id'] ?? $data['campaign'] ?? null ),
 			'affiliate_id' => self::id_of( $data['affiliate_id'] ?? $data['affiliate'] ?? null ),
 		);
@@ -75,20 +70,6 @@ final class CouponSync {
 			'date_expires'  => false !== $expires ? $expires : null,
 			'post_status'   => $active ? 'publish' : 'draft',
 		);
-	}
-
-	/** Program filter: true when the coupon belongs to the configured program (or no program is configured). */
-	public function belongs_to_program( array $coupon ): bool {
-		$program_id = $this->settings->program_id();
-		if ( null === $program_id ) {
-			return true;
-		}
-		$coupon_program = $coupon['program_id'] ?? null;
-		if ( null === $coupon_program && null !== $coupon['campaign_id'] ) {
-			$coupon_program = $this->program_of_campaign( (int) $coupon['campaign_id'] );
-		}
-
-		return $coupon_program === $program_id;
 	}
 
 	/**
@@ -123,9 +104,6 @@ final class CouponSync {
 		);
 		$woo->update_meta_data( Attribution::COUPON_ID_META, (string) $coupon['id'] );
 		$woo->update_meta_data( Attribution::COUPON_CODE_META, $coupon['code'] );
-		if ( null !== $coupon['program_id'] ) {
-			$woo->update_meta_data( self::PROGRAM_META, (string) $coupon['program_id'] );
-		}
 		if ( '' !== $coupon['currency'] && 'fixed' === $coupon['type'] && $coupon['currency'] !== get_woocommerce_currency() ) {
 			$this->log( sprintf( 'Coupon %s: fixed amount is in %s, the shop currency is %s — check the amount.', $coupon['code'], $coupon['currency'], get_woocommerce_currency() ) );
 		}
@@ -174,7 +152,7 @@ final class CouponSync {
 					$max = $changed;
 				}
 				$coupon = self::normalize( $item );
-				if ( null === $coupon || ! $this->belongs_to_program( $coupon ) ) {
+				if ( null === $coupon ) {
 					++$stats['ignored'];
 					continue;
 				}
@@ -213,17 +191,6 @@ final class CouponSync {
 		);
 
 		return isset( $ids[0] ) ? (int) $ids[0] : 0;
-	}
-
-	private function program_of_campaign( int $campaign_id ): ?int {
-		if ( ! array_key_exists( $campaign_id, $this->campaign_programs ) ) {
-			$response = $this->api->get( '/api/campaigns/' . $campaign_id );
-			$this->campaign_programs[ $campaign_id ] = $response->ok() && is_array( $response->data )
-				? self::id_of( $response->data['program'] ?? null )
-				: null;
-		}
-
-		return $this->campaign_programs[ $campaign_id ];
 	}
 
 	/** Id from an int, a numeric string, an IRI ("/api/campaigns/7") or an embedded object. */

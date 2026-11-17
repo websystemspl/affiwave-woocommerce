@@ -4,7 +4,7 @@ Tags: affiliate, woocommerce, referral, coupons, subscriptions
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.3.3
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,9 @@ This plugin sends order data (order id, net amount, currency, payment date, cust
 3. Paste the integration key in WooCommerce → AffiWave, save and click Test connection.
 
 == Changelog ==
+
+= 0.4.0 =
+* No program ID: the program is decided by the API key and the webhook. The Program ID setting and AFFIWAVE_PROGRAM_ID constant are removed; integration keys with or without the old program field both work.
 
 = 0.3.3 =
 * Stored integration key, API key and webhook secret are shown as dots in the fields themselves (like a saved password), not as a hint; no extra notes.

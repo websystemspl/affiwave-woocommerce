@@ -26,7 +26,6 @@ final class Cli {
 		\WP_CLI::line( 'API key:        ' . ( '' !== $s->get( 'api_key' ) ? IntegrationKey::mask( $s->get( 'api_key' ) ) : 'missing' ) );
 		\WP_CLI::line( 'Connected:      ' . ( '' !== $s->get( 'connected_at' ) ? $s->get( 'connected_at' ) : 'unknown (set before 0.3.2 or by hand)' ) );
 		\WP_CLI::line( 'Webhook secret: ' . ( '' !== $s->get( 'webhook_secret' ) ? 'set' : 'missing (coupon webhooks answer 503)' ) );
-		\WP_CLI::line( 'Program id:     ' . ( $s->program_id() ?? 'any (no filter)' ) );
 		\WP_CLI::line( 'Order prefix:   ' . $s->order_prefix() );
 		\WP_CLI::line( 'Webhook URL:    ' . WebhookController::url() );
 		$run = get_option( CouponSync::LAST_RUN );

@@ -12,14 +12,14 @@ final class CouponMappingTest extends TestCase
         $c = CouponSync::normalize([
             'coupon_id' => 42, 'code' => 'ANNA20', 'discount_type' => 'fixed', 'discount_value' => '50.00',
             'amount_basis' => 'gross', 'currency' => 'eur', 'status' => 'active', 'usage_limit' => 100,
-            'expires_at' => '2030-01-31T00:00:00+01:00', 'campaign_id' => 7, 'program_id' => 3, 'affiliate_id' => 12,
+            'expires_at' => '2030-01-31T00:00:00+01:00', 'campaign_id' => 7, 'affiliate_id' => 12,
         ]);
 
         self::assertSame(42, $c['id']);
         self::assertSame('ANNA20', $c['code']);
         self::assertSame('50.00', $c['value']);
         self::assertSame('EUR', $c['currency']);
-        self::assertSame(3, $c['program_id']);
+        self::assertArrayNotHasKey('program_id', $c);
         self::assertSame(7, $c['campaign_id']);
         self::assertSame(100, $c['usage_limit']);
     }
@@ -34,7 +34,6 @@ final class CouponMappingTest extends TestCase
 
         self::assertSame('Jan10', $c['code']);
         self::assertSame('10.00', $c['value']);
-        self::assertNull($c['program_id']);
         self::assertSame(11, $c['campaign_id']);
         self::assertSame(3, $c['affiliate_id']);
         self::assertNull($c['usage_limit']);

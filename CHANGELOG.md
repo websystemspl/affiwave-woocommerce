@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — 2026-11-17
+
+- **No program ID.** The plugin no longer asks for, stores or uses the AffiWave program ID: the program is decided by the
+  API key and the webhook (both belong to one program in AffiWave). The **Program ID** field, the `AFFIWAVE_PROGRAM_ID`
+  constant and the coupon program filter are gone; every coupon delivered by the key's webhook or API is created.
+- The integration key is accepted with or without the old `p` (program) field — the field is ignored, no error.
+- Upgrade: a leftover `program_id` in the saved settings is simply ignored and dropped on the next save.
+
 ## 0.3.3 — 2026-10-29
 
 - Stored secrets are shown **as dots in the fields themselves**: the integration key field contains `awi1_••••…`, the API key

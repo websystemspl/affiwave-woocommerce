@@ -63,9 +63,6 @@ final class WebhookController {
 		if ( null === $coupon ) {
 			return new \WP_REST_Response( array( 'error' => 'invalid_coupon' ), 400 );
 		}
-		if ( ! $this->coupons->belongs_to_program( $coupon ) ) {
-			return new \WP_REST_Response( array( 'ignored' => 'other_program' ), 200 );
-		}
 
 		$result = $this->coupons->upsert( $coupon );
 		if ( is_wp_error( $result ) ) {

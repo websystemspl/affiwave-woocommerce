@@ -17,15 +17,36 @@ final class IntegrationKeyTest extends TestCase
             'api_url' => 'https://affiwave.com',
             'api_key' => 'ak_test.dummy',
             'webhook_secret' => 'whsec_abc',
-            'program_id' => '7',
         ], IntegrationKey::decode($key));
+    }
+
+    public function testKeyWithoutProgramFieldIsAccepted(): void
+    {
+        $json = '{"u":"https://affiwave.com","k":"ak_test.dummy","s":"whsec_abc"}';
+        $key = 'awi1_' . rtrim(strtr(base64_encode($json), '+/', '-_'), '=');
+
+        self::assertSame([
+            'api_url' => 'https://affiwave.com',
+            'api_key' => 'ak_test.dummy',
+            'webhook_secret' => 'whsec_abc',
+        ], IntegrationKey::decode($key));
+        self::assertSame(IntegrationKey::decode($key), IntegrationKey::decode(IntegrationKey::encode('https://affiwave.com', 'ak_test.dummy', 'whsec_abc')));
+    }
+
+    public function testLegacyProgramFieldIsIgnored(): void
+    {
+        $withProgram = IntegrationKey::decode(IntegrationKey::encode('https://affiwave.com', 'ak_x.y', 's', 7));
+        $without = IntegrationKey::decode(IntegrationKey::encode('https://affiwave.com', 'ak_x.y', 's'));
+
+        self::assertSame($without, $withProgram);
+        self::assertArrayNotHasKey('program_id', $withProgram);
     }
 
     public function testIgnoresWhitespaceFromCopying(): void
     {
-        $key = IntegrationKey::encode('https://affiwave.com', 'ak_x.y', '', null);
+        $key = IntegrationKey::encode('https://affiwave.com', 'ak_x.y', '');
 
-        self::assertSame('', IntegrationKey::decode("  " . chunk_split($key, 20, "\n") . " ")['program_id']);
+        self::assertSame('ak_x.y', IntegrationKey::decode("  " . chunk_split($key, 20, "\n") . " ")['api_key']);
     }
 
     public function testRejectsMalformedKeys(): void

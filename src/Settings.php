@@ -19,7 +19,6 @@ final class Settings {
 		'api_url'        => 'AFFIWAVE_API_URL',
 		'api_key'        => 'AFFIWAVE_API_KEY',
 		'webhook_secret' => 'AFFIWAVE_WEBHOOK_SECRET',
-		'program_id'     => 'AFFIWAVE_PROGRAM_ID',
 		'order_prefix'   => 'AFFIWAVE_ORDER_PREFIX',
 		'cookie_days'    => 'AFFIWAVE_COOKIE_DAYS',
 	);
@@ -28,7 +27,6 @@ final class Settings {
 		'api_url'        => 'https://affiwave.com',
 		'api_key'        => '',
 		'webhook_secret' => '',
-		'program_id'     => '',
 		'order_prefix'   => '',
 		'cookie_days'    => '30',
 		// When the integration key was last pasted (shown on the settings screen; not a secret, no wp-config constant).
@@ -62,12 +60,6 @@ final class Settings {
 
 	public function api_url(): string {
 		return rtrim( $this->get( 'api_url' ), '/' );
-	}
-
-	public function program_id(): ?int {
-		$id = (int) $this->get( 'program_id' );
-
-		return $id > 0 ? $id : null;
 	}
 
 	public function cookie_days(): int {

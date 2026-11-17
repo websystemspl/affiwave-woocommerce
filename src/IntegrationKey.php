@@ -1,9 +1,10 @@
 <?php
 /**
  * Integration key generated in AffiWave → Integrations → WooCommerce (WordPress) → Configure: one string that carries the AffiWave
- * address, the API key, the webhook secret and the program ID, so the shop owner pastes one value instead of four.
+ * address, the API key and the webhook secret, so the shop owner pastes one value instead of four.
  *
- * Format: "awi1_" + base64url(JSON {"u": url, "k": api key, "s": webhook secret, "p": program id}).
+ * Format: "awi1_" + base64url(JSON {"u": url, "k": api key, "s": webhook secret}). Older keys also carry "p" (program ID);
+ * it is ignored — the program is decided on the AffiWave side by the API key and the webhook.
  *
  * @package AffiWave\WooCommerce
  */
@@ -31,10 +32,10 @@ final class IntegrationKey {
 	}
 
 	/**
-	 * Decodes the key into setting values (api_url, api_key, webhook_secret, program_id) or returns null when the key
+	 * Decodes the key into setting values (api_url, api_key, webhook_secret) or returns null when the key
 	 * is malformed. Whitespace and line breaks from copying are ignored.
 	 *
-	 * @return array{api_url: string, api_key: string, webhook_secret: string, program_id: string}|null
+	 * @return array{api_url: string, api_key: string, webhook_secret: string}|null
 	 */
 	public static function decode( string $key ): ?array {
 		$key = (string) preg_replace( '/\s+/', '', $key );
@@ -50,7 +51,6 @@ final class IntegrationKey {
 		$url     = is_string( $data['u'] ?? null ) ? rtrim( $data['u'], '/' ) : '';
 		$api_key = is_string( $data['k'] ?? null ) ? $data['k'] : '';
 		$secret  = is_string( $data['s'] ?? null ) ? $data['s'] : '';
-		$program = is_int( $data['p'] ?? null ) && $data['p'] > 0 ? (string) $data['p'] : '';
 		if ( ! preg_match( '#^https?://[^\s/]+#', $url ) || '' === $api_key ) {
 			return null;
 		}
@@ -59,21 +59,20 @@ final class IntegrationKey {
 			'api_url'        => $url,
 			'api_key'        => $api_key,
 			'webhook_secret' => $secret,
-			'program_id'     => $program,
 		);
 	}
 
-	/** Builds a key the same way AffiWave does (tests, dev tools). */
-	public static function encode( string $url, string $api_key, string $webhook_secret, ?int $program_id ): string {
-		$json = (string) json_encode(
-			array(
-				'u' => $url,
-				'k' => $api_key,
-				's' => $webhook_secret,
-				'p' => $program_id,
-			),
-			JSON_UNESCAPED_SLASHES
+	/** Builds a key the same way AffiWave does (tests, dev tools); `$legacy_program` adds the obsolete "p" field of old keys. */
+	public static function encode( string $url, string $api_key, string $webhook_secret, ?int $legacy_program = null ): string {
+		$data = array(
+			'u' => $url,
+			'k' => $api_key,
+			's' => $webhook_secret,
 		);
+		if ( null !== $legacy_program ) {
+			$data['p'] = $legacy_program;
+		}
+		$json = (string) json_encode( $data, JSON_UNESCAPED_SLASHES );
 
 		return self::PREFIX . rtrim( strtr( base64_encode( $json ), '+/', '-_' ), '=' );
 	}

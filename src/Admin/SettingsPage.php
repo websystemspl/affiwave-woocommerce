@@ -54,7 +54,7 @@ final class SettingsPage {
 		$stored = get_option( Settings::OPTION, array() );
 		$stored = is_array( $stored ) ? $stored : array();
 
-		// The integration key from AffiWave fills address, API key, webhook secret and program ID in one go.
+		// The integration key from AffiWave fills address, API key and webhook secret in one go.
 		$integration_key = trim( (string) ( $input['integration_key'] ?? '' ) );
 		unset( $input['integration_key'] );
 		if ( '' !== $integration_key && ! str_contains( $integration_key, '•' ) ) { // Dots = the stored key, unchanged.
@@ -112,7 +112,6 @@ final class SettingsPage {
 			'api_url'        => array( __( 'AffiWave address', 'affiwave-woocommerce' ), 'url', __( 'Default: https://affiwave.com', 'affiwave-woocommerce' ) ),
 			'api_key'        => array( __( 'API key', 'affiwave-woocommerce' ), 'password', __( 'AffiWave → Settings → API keys. Scopes: conversions:write and reports:read.', 'affiwave-woocommerce' ) ),
 			'webhook_secret' => array( __( 'Webhook secret', 'affiwave-woocommerce' ), 'password', __( 'Shown once when you add the webhook below in AffiWave → Webhooks (events coupon.created and coupon.updated).', 'affiwave-woocommerce' ) ),
-			'program_id'     => array( __( 'Program ID', 'affiwave-woocommerce' ), 'number', __( 'Only coupons of this program are created in the shop. Empty = all programs of the account.', 'affiwave-woocommerce' ) ),
 			'order_prefix'   => array( __( 'Order ID prefix', 'affiwave-woocommerce' ), 'text', __( 'Sent as external_order_id = prefix + order number. Must be unique per shop within one AffiWave account. Empty = shop host.', 'affiwave-woocommerce' ) ),
 			'cookie_days'    => array( __( 'Click cookie lifetime (days)', 'affiwave-woocommerce' ), 'number', __( 'Keep it equal to the program cookie duration in AffiWave.', 'affiwave-woocommerce' ) ),
 		);
@@ -154,7 +153,7 @@ final class SettingsPage {
 						<td>
 							<textarea class="large-text code" rows="3" id="affiwave-integration_key" name="affiwave[integration_key]" autocomplete="off" spellcheck="false"
 								placeholder="<?php echo esc_attr( IntegrationKey::PREFIX . '…' ); ?>"><?php echo esc_textarea( '' !== $api_key ? IntegrationKey::PREFIX . self::KEEP . self::KEEP : '' ); ?></textarea>
-							<p class="description"><?php esc_html_e( 'Generate it in AffiWave → Integrations → WooCommerce (WordPress) → Configure and paste it here. It fills in the address, API key, webhook secret and program ID below — and creates the coupon webhook for this shop on the AffiWave side.', 'affiwave-woocommerce' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Generate it in AffiWave → Integrations → WooCommerce (WordPress) → Configure and paste it here. It fills in the address, API key, webhook secret below — and creates the coupon webhook for this shop on the AffiWave side.', 'affiwave-woocommerce' ); ?></p>
 						</td>
 					</tr>
 					<?php foreach ( $fields as $key => [ $label, $type, $help ] ) : ?>

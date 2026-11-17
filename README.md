@@ -8,7 +8,7 @@ Official WordPress plugin connecting a WooCommerce store to an [AffiWave](https:
 | Conversion | **Every paid order** (status processing/completed, including subscription renewals of WooCommerce Subscriptions, SUMO and similar) → `POST /api/conversion` with `click_token` or `coupon`, **net** amount (order total − order tax), order currency, `external_order_id` = prefix + order id, `occurred_at`, `customer_email`. Sent in the background (Action Scheduler); a stamp on the order prevents repeats; AffiWave de-duplicates too. Only payments after the customer's referral are reported. |
 | Retries | Network/5xx/429 → retried by the hourly job and `wp affiwave report`. 4xx (e.g. unknown token) → final, order note. |
 | Refund | A fully refunded, reported order → `POST /api/conversion/refund`. |
-| Partner coupons | Webhooks `coupon.created` / `coupon.updated` → `POST /wp-json/affiwave/v1/webhook` (signature `X-AffiWave-Signature`, 300 s window) create/update a WooCommerce coupon (percentage → percent, fixed → fixed cart, active → published, disabled/expired → draft). Hourly safety-net sync: `GET /api/coupon_codes?changedSince=`. With a **Program ID** set, coupons of other programs of the same AffiWave account are ignored. Codes made outside AffiWave are never overwritten (409). |
+| Partner coupons | Webhooks `coupon.created` / `coupon.updated` → `POST /wp-json/affiwave/v1/webhook` (signature `X-AffiWave-Signature`, 300 s window) create/update a WooCommerce coupon (percentage → percent, fixed → fixed cart, active → published, disabled/expired → draft). Hourly safety-net sync: `GET /api/coupon_codes?changedSince=`. Which program a shop belongs to is decided in AffiWave by the API key and the webhook — the plugin has no program setting. Codes made outside AffiWave are never overwritten (409). |
 
 ## Installation
 
@@ -32,7 +32,7 @@ updater — install 0.3.0 once by hand.
    Empty address or key = nothing is sent.
 
 Setting it up by hand instead: in AffiWave set the program attribution parameter `aw_click`, create the API key and the
-webhook to the URL shown in the plugin settings, then fill in address, API key, webhook secret and program ID.
+webhook to the URL shown in the plugin settings, then fill in address, API key and webhook secret.
 
 Every setting can be fixed in `wp-config.php` (the field is then locked in wp-admin):
 
@@ -40,7 +40,6 @@ Every setting can be fixed in `wp-config.php` (the field is then locked in wp-ad
 define( 'AFFIWAVE_API_URL', 'https://affiwave.com' );
 define( 'AFFIWAVE_API_KEY', 'ak_xxxx.yyyy' );
 define( 'AFFIWAVE_WEBHOOK_SECRET', 'whsec_...' );
-define( 'AFFIWAVE_PROGRAM_ID', 1 );
 define( 'AFFIWAVE_ORDER_PREFIX', 'shop-' );   // default: shop host + "-"
 define( 'AFFIWAVE_COOKIE_DAYS', 30 );
 ```
